@@ -1,4 +1,13 @@
-# hints_app_vue
+# Hints App client with Vue
+
+- I created this project with the [CLI].
+- I followed the instructions in this [video about CLI].
+
+
+[CLI]: https://vuejs.org/v2/guide/installation.html#CLI
+[video about CLI]: https://www.vuemastery.com/courses/real-world-vue-js/vue-cli/
+
+---
 
 ## Project setup
 ```
