@@ -1,34 +1,29 @@
 <template>
-  <div id="app">
-    <!--
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    -->
-    <router-view />
-  </div>
+  <v-app>
+    <v-app-bar app dark>
+      <div class="d-flex align-center">
+        <div>Hint Cards</div>
+      </div>
+    </v-app-bar>
+
+    <v-content>
+      <CardList />
+    </v-content>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
+<script>
+import CardList from "@/components/CardList";
 
-header {
-  font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
+export default {
+  name: "App",
 
-#nav a {
-  color: #2c3e50;
-}
+  components: {
+    CardList
+  },
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  data: () => ({
+    //
+  })
+};
+</script>

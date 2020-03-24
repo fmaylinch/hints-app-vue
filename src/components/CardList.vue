@@ -1,6 +1,5 @@
 <template>
   <div>
-    <header>Card List</header>
     <div v-for="card in cards" :key="card.id">
       {{ card.hints[0] }} = {{ card.hints[1] }}
     </div>
