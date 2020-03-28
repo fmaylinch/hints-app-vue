@@ -46,6 +46,7 @@ export default {
   methods: {
     openCard: function(card) {
       console.log("Open card", card);
+      this.$router.push({ name: "EditCard", params: { id: card.id } });
     }
   }
 };

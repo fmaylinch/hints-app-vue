@@ -1,21 +1,12 @@
 <template>
   <v-app>
-    <CardList />
+    <router-view />
   </v-app>
 </template>
 
 <script>
-import CardList from "@/components/CardList";
 
 export default {
-  name: "App",
-
-  components: {
-    CardList
-  },
-
-  data: () => ({
-    //
-  })
+  name: "App"
 };
 </script>
