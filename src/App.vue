@@ -1,7 +1,12 @@
 <template>
   <v-app>
-    <!-- This will pass this props to all the views -->
-    <router-view :cards="cards" />
+    <transition>
+      <!-- With keep-alive we could keep cards here, instead of in App.vue -->
+      <keep-alive>
+        <!-- This will pass this props to all the views -->
+        <router-view :cards="cards" />
+      </keep-alive>
+    </transition>
   </v-app>
 </template>
 
@@ -23,7 +28,15 @@ export default {
   methods: {
     loadCards: function(cards) {
       console.log("Loaded cards");
+      this.fillRawContent(cards);
       this.cards = cards;
+    },
+    /** Fills each card.rawContent with lowercase content of all fields, useful for searching */
+    fillRawContent(cards) {
+      for (let card of cards) {
+        card.rawContent =
+          (card.hints.join(" ") + card.notes + card.tags.join(" ")).toLowerCase();
+      }
     }
   }
 };

@@ -2,18 +2,22 @@
   <div>
     <v-app-bar app dark>
       <v-toolbar-title>
-        All Cards
-        <span class="title-info">{{cards.length}}</span>
+        Hint Cards
+        <span class="title-info">{{titleInfo()}}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon><v-icon>mdi-magnify</v-icon></v-btn>
       <v-btn icon @click="createCard()"><v-icon>mdi-plus</v-icon></v-btn>
     </v-app-bar>
     <v-content>
       <v-card flat tile>
+        <v-container>
+          <v-text-field append-icon="mdi-close" v-model="search" label="Search…">
+            <v-icon v-show="search" @click="clearSearch()" slot="append">mdi-close</v-icon>
+          </v-text-field>
+        </v-container>
         <v-list>
           <v-list-item
-            v-for="card in cards"
+            v-for="card in searchedCards"
             :key="card.id"
             @click="editCard(card)"
           >
@@ -37,9 +41,21 @@ export default {
     cards: { type: Array, required: true }
   },
   data: () => ({
-    // Nothing for now
+    search: ""
   }),
+  computed: {
+    searchedCards: function() {
+      const lowerSearch = this.search.toLowerCase();
+      return this.cards.filter(it => it.rawContent.indexOf(lowerSearch) >= 0);
+    }
+  },
   methods: {
+    titleInfo: function() {
+      return this.search ? this.searchedCards.length + " of " + this.cards.length : this.cards.length;
+    },
+    clearSearch: function() {
+      this.search = "";
+    },
     createCard: function() {
       this.editCard(null);
     },
