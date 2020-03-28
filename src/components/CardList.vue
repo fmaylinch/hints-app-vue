@@ -38,15 +38,27 @@ export default {
     cards: []
   }),
   created() {
+    // TODO: We should do this only once.
+    //       This is done every time we go back to the list...
+    // TODO: Maybe we don't want a router and just display different components
+    //       because the router moves to another page and things are reloaded.
     axios
       .post(constants.apiUrl + "/cards/getAll")
-      .then(resp => (this.cards = resp.data))
+      .then(resp => this.loadCards(resp.data))
       .catch(e => console.error("API Error", e));
   },
   methods: {
+    loadCards: function(cards) {
+      console.log("Loaded cards");
+      this.cards = cards;
+    },
     openCard: function(card) {
-      console.log("Open card", card);
-      this.$router.push({ name: "EditCard", params: { id: card.id } });
+      // The name of the route is defined in "src/router/index.js".
+      // The route definition there doesn't have params, so we're
+      // actually passing an object directly. As you can read in
+      // https://forum.vuejs.org/t/passing-objects-to-vue-router/32070
+      // when the page is reloaded it won't contain the `card`.
+      this.$router.push({ name: "EditCard", params: { card: card } });
     }
   }
 };

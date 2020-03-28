@@ -12,7 +12,7 @@ const routes = [
     component: Home
   },
   {
-    path: "/edit/:id",
+    path: "/edit",
     name: "EditCard",
     component: EditCard
   },
