@@ -1,14 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app dark>
-      <div class="d-flex align-center">
-        <div>Hint Cards</div>
-      </div>
-    </v-app-bar>
-
-    <v-content>
-      <CardList />
-    </v-content>
+    <CardList />
   </v-app>
 </template>
 
