@@ -8,21 +8,22 @@
       <v-btn icon><v-icon>mdi-delete</v-icon></v-btn>
     </v-app-bar>
     <v-content>
-      <v-container>
-        <v-card flat tile>
-          <v-list>
-            <v-list-item
-              v-for="card in cards"
-              :key="card.id"
-              @click="openCard(card)"
-            >
-              <v-list-item-content>
-                <v-list-item-title v-text="card.hints[0]" />
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-card>
-      </v-container>
+      <v-card flat tile>
+        <v-list>
+          <v-list-item
+            v-for="card in cards"
+            :key="card.id"
+            @click="openCard(card)"
+          >
+            <v-list-item-content>
+              <v-list-item-title class="card-title">
+                <span>{{ card.hints[0] }}</span>
+                <span>{{ card.hints[1] }}</span>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-card>
     </v-content>
   </div>
 </template>
@@ -33,11 +34,9 @@ import constants from "@/constants.js";
 
 export default {
   name: "CardList",
-  data() {
-    return {
-      cards: []
-    };
-  },
+  data: () => ({
+    cards: []
+  }),
   created() {
     axios
       .post(constants.apiUrl + "/cards/getAll")
@@ -52,4 +51,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+}
+</style>
