@@ -7,7 +7,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon><v-icon>mdi-magnify</v-icon></v-btn>
-      <v-btn icon><v-icon>mdi-plus</v-icon></v-btn>
+      <v-btn icon @click="createCard()"><v-icon>mdi-plus</v-icon></v-btn>
     </v-app-bar>
     <v-content>
       <v-card flat tile>
@@ -15,7 +15,7 @@
           <v-list-item
             v-for="card in cards"
             :key="card.id"
-            @click="openCard(card)"
+            @click="editCard(card)"
           >
             <v-list-item-content>
               <v-list-item-title class="card-title">
@@ -40,7 +40,10 @@ export default {
     // Nothing for now
   }),
   methods: {
-    openCard: function(card) {
+    createCard: function() {
+      this.editCard(null);
+    },
+    editCard: function(card) {
       // The name of the route is defined in "src/router/index.js".
       // The route definition there doesn't have params, so we're
       // actually passing an object directly. As you can read in
@@ -64,5 +67,4 @@ export default {
   font-size: 1.2rem;
   color: darkgrey;
 }
-
 </style>

@@ -14,7 +14,8 @@ const routes = [
   {
     path: "/edit",
     name: "EditCard",
-    component: EditCard
+    component: EditCard,
+    props: true,
   },
   {
     path: "/about",
