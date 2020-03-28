@@ -1,11 +1,13 @@
 <template>
   <div>
     <v-app-bar app dark>
-      <v-toolbar-title>All Cards</v-toolbar-title>
+      <v-toolbar-title>
+        All Cards
+        <span class="title-info">{{cards.length}}</span>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon><v-icon>mdi-magnify</v-icon></v-btn>
       <v-btn icon><v-icon>mdi-plus</v-icon></v-btn>
-      <v-btn icon><v-icon>mdi-delete</v-icon></v-btn>
     </v-app-bar>
     <v-content>
       <v-card flat tile>
@@ -29,29 +31,15 @@
 </template>
 
 <script>
-import axios from "axios";
-import constants from "@/constants.js";
-
 export default {
   name: "CardList",
-  data: () => ({
-    cards: []
-  }),
-  created() {
-    // TODO: We should do this only once.
-    //       This is done every time we go back to the list...
-    // TODO: Maybe we don't want a router and just display different components
-    //       because the router moves to another page and things are reloaded.
-    axios
-      .post(constants.apiUrl + "/cards/getAll")
-      .then(resp => this.loadCards(resp.data))
-      .catch(e => console.error("API Error", e));
+  props: {
+    cards: { type: Array, required: true }
   },
+  data: () => ({
+    // Nothing for now
+  }),
   methods: {
-    loadCards: function(cards) {
-      console.log("Loaded cards");
-      this.cards = cards;
-    },
     openCard: function(card) {
       // The name of the route is defined in "src/router/index.js".
       // The route definition there doesn't have params, so we're
@@ -65,9 +53,16 @@ export default {
 </script>
 
 <style scoped>
+.title-info {
+  font-size: 0.9rem;
+  color: grey;
+  padding-left: 8px;
+}
 .card-title {
   display: flex;
   justify-content: space-between;
   font-size: 1.2rem;
+  color: darkgrey;
 }
+
 </style>

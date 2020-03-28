@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <CardList />
+    <CardList :cards="cards" />
   </div>
 </template>
 
@@ -10,6 +10,9 @@ import CardList from "@/components/CardList.vue";
 
 export default {
   name: "Home",
+  props: {
+    cards: { type: Array, required: true }
+  },
   components: {
     CardList
   }
