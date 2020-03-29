@@ -19,11 +19,11 @@
 </template>
 
 <script>
-import { EventBus } from '@/event-bus.js';
-import CardUpdateAction from '@/card-update-action.js';
-import Util from "@/util.js";
+  import {EventBus} from '@/event-bus.js';
+  import CardUpdateAction from '@/card-update-action.js';
+  import Util from "@/util.js";
 
-export default {
+  export default {
   props: {
     card: Object // route params that comes as props thanks to configuration in routes
   },
@@ -32,17 +32,7 @@ export default {
   }),
   computed: {
     sliderColor: function() {
-      const score = this.cardForm.score;
-      if (score < 10) return "red";
-      if (score < 20) return "deep-orange";
-      if (score < 30) return "orange";
-      if (score < 40) return "amber";
-      if (score < 50) return "yellow";
-      if (score < 60) return "white";
-      if (score < 70) return "blue lighten-2";
-      if (score < 80) return "blue";
-      if (score < 90) return "teal";
-      return "green";
+      return Util.colorFromScore(this.cardForm.score);
     },
     isEditing: function() {
       return this.card != null;

@@ -28,6 +28,11 @@
                 <span>{{ card.hints[0] }}</span>
                 <span>{{ card.hints[1] }}</span>
               </v-list-item-title>
+              <v-progress-linear
+                height="1"
+                :color="colorForCard(card)"
+                :value="card.score">
+              </v-progress-linear>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -79,8 +84,8 @@ export default {
         ? this.searchedCards.length + " of " + this.cards.length
         : this.cards.length;
     },
-    clearSearch: function() {
-      this.search = "";
+    colorForCard: function(card) {
+      return Util.colorFromScore(card.score);
     },
     createCard: function() {
       this.editCard(null);
