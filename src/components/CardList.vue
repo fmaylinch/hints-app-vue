@@ -65,14 +65,14 @@
     }
   },
   methods: {
-    retrieveCardsFromApi: function() {
+    retrieveCardsFromApi() {
       console.log("Loading cards from API");
       axios
         .post(constants.apiUrl + "/cards/getAll")
         .then(resp => this.prepareCards(resp.data))
         .catch(e => console.error("API Error", e));
     },
-    listenToCardUpdates: function() {
+    listenToCardUpdates() {
       // Remove listener because, when developing, listeners accumulate when vue refreshes.
       EventBus.$off("card-updated");
       EventBus.$on("card-updated", update => {
@@ -80,6 +80,7 @@
 
         if (update.action === CardUpdateAction.update) {
           console.log("Updating card", update.card.hints[0]);
+
           axios
             .post(constants.apiUrl + "/cards/saveOrUpdate", update.card)
             .then(() => this.retrieveCardsFromApi())
@@ -99,7 +100,7 @@
         }
       });
     },
-    prepareCards: function(cards) {
+    prepareCards(cards) {
       console.log("Preparing cards");
       this.fillRawContent(cards);
       this.cards = cards;
@@ -110,18 +111,18 @@
         card.rawContent = Util.getCardRawContent(card).toLowerCase();
       }
     },
-    titleInfo: function() {
+    titleInfo() {
       return this.search
         ? this.searchedCards.length + " of " + this.cards.length
         : this.cards.length;
     },
-    colorForCard: function(card) {
+    colorForCard(card) {
       return Util.colorFromScore(card.score);
     },
-    createCard: function() {
+    createCard() {
       this.editCard(null);
     },
-    editCard: function(card) {
+    editCard(card) {
       // The name of the route is defined in "src/router/index.js".
       // The route definition there doesn't have params like :id, so we're
       // actually passing an object directly. As you can read in

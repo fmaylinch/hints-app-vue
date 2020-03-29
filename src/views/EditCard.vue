@@ -31,13 +31,13 @@
     cardForm: null
   }),
   computed: {
-    sliderColor: function() {
+    sliderColor() {
       return Util.colorFromScore(this.cardForm.score);
     },
-    isEditing: function() {
+    isEditing() {
       return this.card != null;
     },
-    title: function() {
+    title() {
       return this.isEditing ? "Edit Card" : "Create Card";
     }
   },
@@ -55,21 +55,21 @@
     next();
   },
   methods: {
-    deleteCard: function() {
+    deleteCard() {
       EventBus.$emit("card-updated", {
         action: CardUpdateAction.delete,
         card: this.card
       });
       this.$router.go(-1); // go back to CardList
     },
-    buildCardUpdate: function() {
+    buildCardUpdate() {
       let card = this.formToCard(this.cardForm);
       return {
         action: this.decideAction(card),
         card: card
       };
     },
-    decideAction: function(card) {
+    decideAction(card) {
 
       if (card.hints.length === 0)
         return CardUpdateAction.nothing;
@@ -82,7 +82,7 @@
 
       return CardUpdateAction.update;
     },
-    formToCard: function(cardForm) {
+    formToCard(cardForm) {
       return {
         id: cardForm.id,
         hints: cardForm.hints.split("\n").map(hint => hint.trim()).filter(it => !!it),
@@ -91,7 +91,7 @@
         tags: cardForm.tags.trim().split(/[, ]+/).filter(it => !!it)
       };
     },
-    cardToForm: function(card) {
+    cardToForm(card) {
       if (card) {
         return {
           id: card.id,
