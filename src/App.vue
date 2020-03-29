@@ -13,6 +13,7 @@
 <script>
 import axios from "axios";
 import constants from "@/constants.js";
+import Util from "@/util.js";
 
 export default {
   name: "App",
@@ -34,8 +35,7 @@ export default {
     /** Fills each card.rawContent with lowercase content of all fields, useful for searching */
     fillRawContent(cards) {
       for (let card of cards) {
-        card.rawContent =
-          (card.hints.join(" ") + card.notes + card.tags.join(" ")).toLowerCase();
+        card.rawContent = Util.getCardRawContent(card).toLowerCase();
       }
     }
   }

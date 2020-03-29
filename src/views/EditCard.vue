@@ -20,6 +20,8 @@
 
 <script>
 import { EventBus } from '@/event-bus.js';
+import CardUpdateAction from '@/card-update-action.js';
+import Util from "@/util.js";
 
 export default {
   props: {
@@ -65,16 +67,32 @@ export default {
   },
   methods: {
     buildCardUpdate: function() {
-      // TODO: decide action: create, update, delete, nothing
-      return { action:"xxx", card:this.formToCard(this.cardForm) };
+      let card = this.formToCard(this.cardForm);
+      return {
+        action: this.decideAction(card),
+        card: card
+      };
+    },
+    decideAction: function(card) {
+
+      if (card.hints.length === 0)
+        return CardUpdateAction.nothing;
+
+      if (!this.card)
+        return CardUpdateAction.update;
+
+      if (Util.getCardRawContent(card) === Util.getCardRawContent(this.card))
+        return CardUpdateAction.nothing;
+
+      return CardUpdateAction.update;
     },
     formToCard: function(cardForm) {
       return {
         id: cardForm.id,
-        hints: cardForm.hints.split("\n").map(hint => hint.trim()),
+        hints: cardForm.hints.split("\n").map(hint => hint.trim()).filter(it => !!it),
         notes: cardForm.notes,
         score: cardForm.score,
-        tags: cardForm.tags.trim().split(/[, ]+/).filter(tag => !!tag)
+        tags: cardForm.tags.trim().split(/[, ]+/).filter(it => !!it)
       };
     },
     cardToForm: function(card) {

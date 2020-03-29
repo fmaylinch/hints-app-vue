@@ -37,7 +37,10 @@
 </template>
 
 <script>
+import axios from "axios";
+import constants from "@/constants.js";
 import { EventBus } from '@/event-bus.js';
+import CardUpdateAction from '@/card-update-action.js';
 
 export default {
   name: "CardList",
@@ -77,6 +80,13 @@ export default {
     EventBus.$off("card-updated");
     EventBus.$on("card-updated", update => {
       console.log("Card updated", update);
+      if (update.action === CardUpdateAction.update) {
+        console.log("Updating card");
+        axios
+          .post(constants.apiUrl + "/cards/saveOrUpdate", update.card)
+          .then(() => console.log("Reload cards")) // TODO: send event to App, or move logic here
+          .catch(e => console.error("API Error", e));
+      }
     });
   }
 };
