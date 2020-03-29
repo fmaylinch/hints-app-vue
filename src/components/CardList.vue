@@ -11,9 +11,11 @@
     <v-content>
       <v-card flat tile>
         <v-container>
-          <v-text-field append-icon="mdi-close" v-model="search" label="Search…">
-            <v-icon v-show="search" @click="clearSearch()" slot="append">mdi-close</v-icon>
-          </v-text-field>
+          <v-text-field
+            clearable
+            v-model="search"
+            placeholder="Search…"
+          />
         </v-container>
         <v-list>
           <v-list-item
@@ -41,11 +43,11 @@ export default {
     cards: { type: Array, required: true }
   },
   data: () => ({
-    search: ""
+    search: null
   }),
   computed: {
     searchedCards: function() {
-      const lowerSearch = this.search.toLowerCase();
+      const lowerSearch = this.search ? this.search.toLowerCase() : "";
       return this.cards.filter(it => it.rawContent.indexOf(lowerSearch) >= 0);
     }
   },
