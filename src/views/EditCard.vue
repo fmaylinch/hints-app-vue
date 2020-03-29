@@ -3,7 +3,7 @@
     <v-app-bar app dark>
       <v-toolbar-title>{{ title }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn v-if="isEditing" icon><v-icon>mdi-delete</v-icon></v-btn>
+      <v-btn v-if="isEditing" @click="deleteCard()" icon><v-icon>mdi-delete</v-icon></v-btn>
     </v-app-bar>
     <v-content>
       <v-card flat tile>
@@ -55,6 +55,13 @@
     next();
   },
   methods: {
+    deleteCard: function() {
+      EventBus.$emit("card-updated", {
+        action: CardUpdateAction.delete,
+        card: this.card
+      });
+      this.$router.go(-1); // go back to CardList
+    },
     buildCardUpdate: function() {
       let card = this.formToCard(this.cardForm);
       return {

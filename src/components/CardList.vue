@@ -42,14 +42,18 @@
 </template>
 
 <script>
-import axios from "axios";
-import constants from "@/constants.js";
-import { EventBus } from '@/event-bus.js';
-import CardUpdateAction from '@/card-update-action.js';
-import Util from "@/util.js";
+  import axios from "axios";
+  import constants from "@/constants.js";
+  import {EventBus} from '@/event-bus.js';
+  import CardUpdateAction from '@/card-update-action.js';
+  import Util from "@/util.js";
 
-export default {
+  export default {
   name: "CardList",
+  created() {
+    this.retrieveCardsFromApi();
+    this.listenToCardUpdates();
+  },
   data: () => ({
     search: null,
     cards: []
@@ -67,6 +71,33 @@ export default {
         .post(constants.apiUrl + "/cards/getAll")
         .then(resp => this.prepareCards(resp.data))
         .catch(e => console.error("API Error", e));
+    },
+    listenToCardUpdates: function() {
+      // Remove listener because, when developing, listeners accumulate when vue refreshes.
+      EventBus.$off("card-updated");
+      EventBus.$on("card-updated", update => {
+        console.log("Card updated", update);
+
+        if (update.action === CardUpdateAction.update) {
+          console.log("Updating card", update.card.hints[0]);
+          axios
+            .post(constants.apiUrl + "/cards/saveOrUpdate", update.card)
+            .then(() => this.retrieveCardsFromApi())
+            .catch(e => console.error("API Error", e));
+
+        } else if (update.action === CardUpdateAction.delete) {
+          console.log("Removing card", update.card.hints[0]);
+
+          axios({
+            method: 'POST',
+            headers: {'content-type': 'text/plain'},
+            data: update.card.id,
+            url: constants.apiUrl + "/cards/deleteOne",
+          })
+            .then(() => this.retrieveCardsFromApi())
+            .catch(e => console.error("API Error", e));
+        }
+      });
     },
     prepareCards: function(cards) {
       console.log("Preparing cards");
@@ -98,22 +129,6 @@ export default {
       // when the page is reloaded it won't contain the `card`.
       this.$router.push({ name: "EditCard", params: { card: card } });
     }
-  },
-  created() {
-    this.retrieveCardsFromApi();
-
-    // Remove listener. When developing the listeners are accumulated when vue refreshes.
-    EventBus.$off("card-updated");
-    EventBus.$on("card-updated", update => {
-      console.log("Card updated", update);
-      if (update.action === CardUpdateAction.update) {
-        console.log("Updating card");
-        axios
-          .post(constants.apiUrl + "/cards/saveOrUpdate", update.card)
-          .then(() => this.retrieveCardsFromApi())
-          .catch(e => console.error("API Error", e));
-      }
-    });
   }
 };
 </script>
