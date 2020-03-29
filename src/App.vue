@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <transition>
-      <!-- With keep-alive we could keep cards here, instead of in App.vue -->
-      <keep-alive>
+      <!-- With keep-alive we could keep cards in CardList, instead of in App.vue -->
+      <keep-alive include="Home">
         <!-- This will pass this props to all the views -->
         <router-view :cards="cards" />
       </keep-alive>
