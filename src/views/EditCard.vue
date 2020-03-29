@@ -25,8 +25,7 @@ import Util from "@/util.js";
 
 export default {
   props: {
-    card: Object, // route params that comes as props thanks to configuration in routes
-    cards: { type: Array, required: true }
+    card: Object // route params that comes as props thanks to configuration in routes
   },
   data: () => ({
     cardForm: null

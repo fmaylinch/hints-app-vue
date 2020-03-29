@@ -41,14 +41,13 @@ import axios from "axios";
 import constants from "@/constants.js";
 import { EventBus } from '@/event-bus.js';
 import CardUpdateAction from '@/card-update-action.js';
+import Util from "@/util.js";
 
 export default {
   name: "CardList",
-  props: {
-    cards: { type: Array, required: true }
-  },
   data: () => ({
-    search: null
+    search: null,
+    cards: []
   }),
   computed: {
     searchedCards: function() {
@@ -57,8 +56,28 @@ export default {
     }
   },
   methods: {
+    retrieveCardsFromApi: function() {
+      console.log("Loading cards from API");
+      axios
+        .post(constants.apiUrl + "/cards/getAll")
+        .then(resp => this.prepareCards(resp.data))
+        .catch(e => console.error("API Error", e));
+    },
+    prepareCards: function(cards) {
+      console.log("Preparing cards");
+      this.fillRawContent(cards);
+      this.cards = cards;
+    },
+    /** Fills each card.rawContent with lowercase content of all fields, useful for searching */
+    fillRawContent(cards) {
+      for (let card of cards) {
+        card.rawContent = Util.getCardRawContent(card).toLowerCase();
+      }
+    },
     titleInfo: function() {
-      return this.search ? this.searchedCards.length + " of " + this.cards.length : this.cards.length;
+      return this.search
+        ? this.searchedCards.length + " of " + this.cards.length
+        : this.cards.length;
     },
     clearSearch: function() {
       this.search = "";
@@ -68,7 +87,7 @@ export default {
     },
     editCard: function(card) {
       // The name of the route is defined in "src/router/index.js".
-      // The route definition there doesn't have params, so we're
+      // The route definition there doesn't have params like :id, so we're
       // actually passing an object directly. As you can read in
       // https://forum.vuejs.org/t/passing-objects-to-vue-router/32070
       // when the page is reloaded it won't contain the `card`.
@@ -76,6 +95,8 @@ export default {
     }
   },
   created() {
+    this.retrieveCardsFromApi();
+
     // Remove listener. When developing the listeners are accumulated when vue refreshes.
     EventBus.$off("card-updated");
     EventBus.$on("card-updated", update => {
@@ -84,7 +105,7 @@ export default {
         console.log("Updating card");
         axios
           .post(constants.apiUrl + "/cards/saveOrUpdate", update.card)
-          .then(() => console.log("Reload cards")) // TODO: send event to App, or move logic here
+          .then(() => this.retrieveCardsFromApi())
           .catch(e => console.error("API Error", e));
       }
     });
