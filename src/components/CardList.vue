@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import { EventBus } from '@/event-bus.js';
+
 export default {
   name: "CardList",
   props: {
@@ -69,6 +71,13 @@ export default {
       // when the page is reloaded it won't contain the `card`.
       this.$router.push({ name: "EditCard", params: { card: card } });
     }
+  },
+  created() {
+    // Remove listener. When developing the listeners are accumulated when vue refreshes.
+    EventBus.$off("card-updated");
+    EventBus.$on("card-updated", update => {
+      console.log("Card updated", update);
+    });
   }
 };
 </script>

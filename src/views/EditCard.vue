@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { EventBus } from '@/event-bus.js';
+
 export default {
   props: {
     card: Object, // route params that comes as props thanks to configuration in routes
@@ -52,20 +54,47 @@ export default {
     // Note that we pass an object to params, the card won't be available if page is reloaded.
     // It will then think that we are going to create a new card. See computed title.
     console.log("card", this.card);
-    if (this.card) {
-      this.cardForm = {
-        hints: this.card.hints.join("\n"),
-        score: this.card.score,
-        notes: this.card.notes,
-        tags: this.card.tags.join(" ")
+    this.cardForm = this.cardToForm(this.card);
+  },
+  beforeRouteLeave(to, from, next) {
+    // When going back home, notify the action in the card
+    if (from.name === "EditCard" && to.name === "Home") {
+      EventBus.$emit("card-updated", this.buildCardUpdate());
+    }
+    next();
+  },
+  methods: {
+    buildCardUpdate: function() {
+      // TODO: decide action: create, update, delete, nothing
+      return { action:"xxx", card:this.formToCard(this.cardForm) };
+    },
+    formToCard: function(cardForm) {
+      return {
+        id: cardForm.id,
+        hints: cardForm.hints.split("\n").map(hint => hint.trim()),
+        notes: cardForm.notes,
+        score: cardForm.score,
+        tags: cardForm.tags.trim().split(/[, ]+/).filter(tag => !!tag)
       };
-    } else {
-      this.cardForm = {
-        hints: "",
-        score: 50,
-        notes: "",
-        tags: ""
-      };
+    },
+    cardToForm: function(card) {
+      if (card) {
+        return {
+          id: card.id,
+          hints: card.hints.join("\n"),
+          score: card.score,
+          notes: card.notes,
+          tags: card.tags.join(" ")
+        };
+      } else {
+        return {
+          id: null,
+          hints: "",
+          score: 50,
+          notes: "",
+          tags: ""
+        };
+      }
     }
   }
 };
