@@ -7,22 +7,27 @@
 [CLI]: https://vuejs.org/v2/guide/installation.html#CLI
 [video about CLI]: https://www.vuemastery.com/courses/real-world-vue-js/vue-cli/
 
----
 
 ## Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Development
 
-### Compiles and minifies for production
-```
-npm run build
-```
+- Start API server `hints-app-api` and enable CORS
+- In `apiUrl` (file `constants.js`) use `http://localhost:8090` or the computer IP if you want access from mobile
+- `npm run serve`
+- http://localhost:8080
+
+## Deployment
+
+- Set `apiUrl = ""` (file `constants.js`)
+- `npm run build`
+- Copy `dist` folder contents to `resources` of `hints_app_api` project
+- Run `deploy.sh` from `hints_app_api` project
+
+## Other
 
 ### Lints and fixes files
 ```
