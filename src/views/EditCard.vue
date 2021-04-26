@@ -44,7 +44,7 @@ export default {
   created() {
     // Note that we pass an object to params, the card won't be available if page is reloaded.
     // It will then think that we are going to create a new card. See computed title.
-    console.log("card", this.card);
+    console.log("Editing card:", this.card);
     this.cardForm = this.cardToForm(this.card);
   },
   beforeRouteLeave(to, from, next) {
@@ -70,7 +70,6 @@ export default {
       };
     },
     decideAction(card) {
-
       if (card.hints.length === 0)
         return CardUpdateAction.nothing;
 

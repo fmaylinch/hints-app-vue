@@ -6,6 +6,7 @@
         <span class="title-info">{{titleInfo()}}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn icon @click="playCards()"><v-icon>mdi-play</v-icon></v-btn>
       <v-btn icon @click="createCard()"><v-icon>mdi-plus</v-icon></v-btn>
     </v-app-bar>
     <v-content>
@@ -53,6 +54,7 @@ export default {
   created() {
     this.retrieveCardsFromApi();
     this.listenToCardUpdates();
+    this.listenToPlayedCards();
   },
   data: () => ({
     search: null,
@@ -71,6 +73,15 @@ export default {
         .post(constants.apiUrl + "/cards/getAll")
         .then(resp => this.prepareCards(resp.data))
         .catch(e => console.error("API Error", e));
+    },
+    listenToPlayedCards() {
+      EventBus.$off("card-played");
+      EventBus.$on("card-played", event => {
+        console.log("Card played", event);
+        console.log("Going to edit card");
+        // If we go to editCard instantly, there's a strange error
+        setTimeout(() => this.editCard(event.card), 50);
+      });
     },
     listenToCardUpdates() {
       // Remove listener because, when developing, listeners accumulate when vue refreshes.
@@ -122,6 +133,11 @@ export default {
     createCard() {
       this.editCard(null);
     },
+    playCards() {
+      const cardIndex = Math.floor(Math.random() * this.searchedCards.length);
+      console.log("Playing card " + cardIndex);
+      this.playCard(this.searchedCards[cardIndex]);
+    },
     editCard(card) {
       // The name of the route is defined in "src/router/index.js".
       // The route definition there doesn't have params like :id, so we're
@@ -129,6 +145,10 @@ export default {
       // https://forum.vuejs.org/t/passing-objects-to-vue-router/32070
       // when the page is reloaded it won't contain the `card`.
       this.$router.push({ name: "EditCard", params: { card: card } });
+    },
+    playCard(card) {
+      // This works like editCard()
+      this.$router.push({ name: "PlayCard", params: { card: card } });
     }
   }
 };

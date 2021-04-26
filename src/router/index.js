@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import EditCard from "../views/EditCard.vue";
+import PlayCard from "../views/PlayCard.vue";
 
 Vue.use(VueRouter);
 
@@ -15,7 +16,13 @@ const routes = [
     path: "/edit",
     name: "EditCard",
     component: EditCard,
-    props: true,
+    props: true
+  },
+  {
+    path: "/play",
+    name: "PlayCard",
+    component: PlayCard,
+    props: true
   },
   {
     path: "/about",
