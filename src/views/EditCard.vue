@@ -19,11 +19,11 @@
 </template>
 
 <script>
-  import {EventBus} from '@/event-bus.js';
-  import CardUpdateAction from '@/card-update-action.js';
-  import Util from "@/util.js";
+import {EventBus} from '@/event-bus.js';
+import CardUpdateAction from '@/card-update-action.js';
+import Util from "@/util.js";
 
-  export default {
+export default {
   props: {
     card: Object // route params that comes as props thanks to configuration in routes
   },
