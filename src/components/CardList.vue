@@ -6,6 +6,7 @@
         <span class="title-info">{{titleInfo()}}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn icon @click="logout()"><v-icon>mdi-logout</v-icon></v-btn>
       <v-btn icon @click="playCards()"><v-icon>mdi-play</v-icon></v-btn>
       <v-btn icon @click="createCard()"><v-icon>mdi-plus</v-icon></v-btn>
     </v-app-bar>
@@ -48,13 +49,16 @@ import constants from "@/constants.js";
 import {EventBus} from '@/event-bus.js';
 import CardUpdateAction from '@/card-update-action.js';
 import Util from "@/util.js";
+import Cookies from "js-cookie";
 
 export default {
   name: "CardList",
   created() {
+    this.axiosInstance = this.createAxiosInstance();
     this.retrieveCardsFromApi();
-    this.listenToCardUpdates();
-    this.listenToPlayedCards();
+    this.listenToCardUpdated();
+    this.listenToCardPlayed();
+    this.listenToUserLogged();
   },
   data: () => ({
     search: null,
@@ -67,14 +71,25 @@ export default {
     }
   },
   methods: {
+    createAxiosInstance() {
+      const jwt = Cookies.get("jwt");
+      if (!jwt) {
+        return axios.create({ baseURL: constants.apiUrl });
+      }
+      console.log("Creating axios instance with JWT",  jwt.substring(0, 10) + "...");
+      return axios.create({
+        baseURL: constants.apiUrl,
+        headers: { Authorization: "Bearer " + jwt }
+      });
+    },
     retrieveCardsFromApi() {
       console.log("Loading cards from API");
-      axios
-        .post(constants.apiUrl + "/cards/getAll")
+      this.axiosInstance
+        .post("cards/getAll")
         .then(resp => this.prepareCards(resp.data))
-        .catch(e => console.error("API Error", e));
+        .catch(e => this.handleError(e));
     },
-    listenToPlayedCards() {
+    listenToCardPlayed() {
       EventBus.$off("card-played");
       EventBus.$on("card-played", event => {
         console.log("Card played", event);
@@ -83,28 +98,40 @@ export default {
         setTimeout(() => this.editCard(event.card), 50);
       });
     },
-    listenToCardUpdates() {
+    listenToUserLogged() {
+      EventBus.$off("user-logged");
+      EventBus.$on("user-logged", event => {
+        console.log("User logged", event);
+        this.axiosInstance = this.createAxiosInstance();
+        this.retrieveCardsFromApi();
+      });
+    },
+    logout() {
+      Cookies.remove("jwt");
+      location.reload();
+    },
+    listenToCardUpdated() {
       // Remove listener because, when developing, listeners accumulate when vue refreshes.
       EventBus.$off("card-updated");
-      EventBus.$on("card-updated", update => {
-        console.log("Card updated", update);
+      EventBus.$on("card-updated", event => {
+        console.log("Card updated", event);
 
-        if (update.action === CardUpdateAction.update) {
-          console.log("Updating card", update.card.hints[0]);
+        if (event.action === CardUpdateAction.update) {
+          console.log("Updating card", event.card.hints[0]);
 
-          axios
-            .post(constants.apiUrl + "/cards/saveOrUpdate", update.card)
+          this.axiosInstance
+            .post("cards/saveOrUpdate", event.card)
             .then(() => this.retrieveCardsFromApi())
             .catch(e => console.error("API Error", e));
 
-        } else if (update.action === CardUpdateAction.delete) {
-          console.log("Removing card", update.card.hints[0]);
+        } else if (event.action === CardUpdateAction.delete) {
+          console.log("Removing card", event.card.hints[0]);
 
-          axios({
-            method: 'POST',
-            headers: {'content-type': 'text/plain'},
-            data: update.card.id,
-            url: constants.apiUrl + "/cards/deleteOne",
+          this.axiosInstance({
+            method: "POST",
+            headers: { "content-type": "text/plain" },
+            data: event.card.id,
+            url: "cards/deleteOne",
           })
             .then(() => this.retrieveCardsFromApi())
             .catch(e => console.error("API Error", e));
@@ -149,6 +176,13 @@ export default {
     playCard(card) {
       // This works like editCard()
       this.$router.push({ name: "PlayCard", params: { card: card } });
+    },
+    handleError(error) {
+      console.error("API Error:", error);
+      if (error.response.status === 401) {
+        // We guess we need to login
+        this.$router.push({ name: "Login" });
+      }
     }
   }
 };

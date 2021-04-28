@@ -32,9 +32,7 @@ export default {
   },
   methods: {
     revealCard() {
-      EventBus.$emit("card-played", {
-        card: this.card
-      });
+      EventBus.$emit("card-played", {card: this.card});
       this.$router.go(-1); // go back to CardList
     }
   }

@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import EditCard from "../views/EditCard.vue";
 import PlayCard from "../views/PlayCard.vue";
+import Login from "../views/Login.vue";
 
 Vue.use(VueRouter);
 
@@ -11,6 +12,11 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login
   },
   {
     path: "/edit",
