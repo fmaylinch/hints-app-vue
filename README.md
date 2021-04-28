@@ -16,7 +16,7 @@ npm install
 ## Development
 
 - Start API server `hints-app-api` and enable CORS
-- In `apiUrl` (file `constants.js`) use `http://localhost:8090` or the computer IP if you want access from mobile
+- In `apiUrl` (file `constants.js`) use `http://localhost:8090/` or the computer IP if you want access from mobile
 - `npm run serve`
 - http://localhost:8080
 

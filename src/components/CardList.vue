@@ -6,7 +6,7 @@
         <span class="title-info">{{titleInfo()}}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon @click="logout()"><v-icon>mdi-logout</v-icon></v-btn>
+      <v-btn icon @click="logout()"><v-icon>mdi-logout-variant</v-icon></v-btn>
       <v-btn icon @click="playCards()"><v-icon>mdi-play</v-icon></v-btn>
       <v-btn icon @click="createCard()"><v-icon>mdi-plus</v-icon></v-btn>
     </v-app-bar>

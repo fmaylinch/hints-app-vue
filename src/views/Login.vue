@@ -3,13 +3,14 @@
     <v-app-bar app dark>
       <v-toolbar-title>Login</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon @click="login()"><v-icon>mdi-play</v-icon></v-btn>
+      <v-btn icon @click="login()"><v-icon>mdi-login-variant</v-icon></v-btn>
     </v-app-bar>
     <v-content>
       <v-card flat tile>
         <v-container>
           <v-text-field v-model="loginData.email" label="email" auto-grow rows="1" />
           <v-text-field v-model="loginData.password" label="password" auto-grow rows="1" />
+          <v-text-field v-model="loginData.password2" label="repeat password to register" auto-grow rows="1" />
         </v-container>
       </v-card>
     </v-content>
@@ -24,7 +25,7 @@ import Cookies from 'js-cookie'
 
 export default {
   data: () => ({
-    loginData: { email: "", password: "" }
+    loginData: { email: "", password: "", password2: "" }
   }),
   created() {
     console.log("Login");
