@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import {EventBus} from '@/event-bus.js';
-import CardUpdateAction from '@/card-update-action.js';
+import { EventBus } from "@/event-bus.js";
+import CardUpdateAction from "@/card-update-action.js";
 import Util from "@/util.js";
 
 export default {

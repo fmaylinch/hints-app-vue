@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from "vue";
 
 /**
  * Global event bus used to communicate between components.

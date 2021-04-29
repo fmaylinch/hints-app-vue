@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import {EventBus} from '@/event-bus.js';
+import { EventBus } from "@/event-bus.js";
 import axios from "axios";
 import constants from "@/constants";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 export default {
   data: () => ({

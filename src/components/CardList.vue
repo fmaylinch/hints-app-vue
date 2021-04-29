@@ -47,7 +47,7 @@
 import axios from "axios";
 import constants from "@/constants.js";
 import {EventBus} from '@/event-bus.js';
-import CardUpdateAction from '@/card-update-action.js';
+import CardUpdateAction from "@/card-update-action.js";
 import Util from "@/util.js";
 import Cookies from "js-cookie";
 
