@@ -15,16 +15,16 @@ npm install
 
 ## Development
 
-- Start API server `hints-app-api` and enable CORS
-- In `apiUrl` (file `constants.js`) use `http://localhost:8090/` or the computer IP if you want access from mobile
+- Start API server `hints-app-api`
+    - Note that `constants.js` points to the server
+    - Check that CORS is enabled in server 
 - `npm run serve`
 - http://localhost:8080
 
 ## Deployment
 
-- Set `apiUrl = ""` (file `constants.js`)
 - `npm run build`
-- Copy `dist` folder contents to `resources` of `hints_app_api` project
+- `./copy-dist.sh` to copy `dist` folder to `hints_app_api` project
 - Run `deploy.sh` from `hints_app_api` project
 
 ## Other
