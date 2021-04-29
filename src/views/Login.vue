@@ -9,8 +9,8 @@
       <v-card flat tile>
         <v-container>
           <v-text-field v-model="loginData.email" label="email" auto-grow rows="1" />
-          <v-text-field v-model="loginData.password" label="password" auto-grow rows="1" />
-          <v-text-field v-model="loginData.password2" label="repeat password to register" auto-grow rows="1" />
+          <v-text-field v-model="loginData.password" type="password" label="password" auto-grow rows="1" />
+          <v-text-field v-model="loginData.password2" type="password" label="repeat password to register" auto-grow rows="1" />
         </v-container>
       </v-card>
     </v-content>
