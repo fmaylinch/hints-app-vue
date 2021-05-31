@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <transition>
+      <!-- https://vuejs.org/v2/api/#keep-alive -->
       <keep-alive include="Home">
-        <!-- We could pass props to all the views -->
         <router-view />
       </keep-alive>
     </transition>
